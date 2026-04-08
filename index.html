@@ -140,6 +140,12 @@
       transform: scale(1.02);
       box-shadow: 0 8px 25px rgba(255, 45, 146, 0.35); 
     }
+    
+    /* NEW: Animation classes for GSAP fallback/initial state */
+    .pill-nav {
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+    }
     .btn-explode .btn-text { position: relative; z-index: 2; pointer-events: none; }
     .btn-explode .cursor-glow {
         position: absolute;
@@ -1203,7 +1209,8 @@
       const nav = document.querySelector('.pill-nav');
       if (!nav) return;
       
-      // Reset GSAP state if already exists
+      // Clear existing ScrollTriggers for nav
+      ScrollTrigger.getAll().filter(st => st.vars.id === "nav-trigger").forEach(st => st.kill());
       if (window.navTl) { window.navTl.kill(); }
       
       if (!isMobile) {
@@ -1217,32 +1224,34 @@
       // Define the "Buttery Watery" GSAP Timeline
       window.navTl = gsap.timeline({ paused: true });
       window.navTl.fromTo(nav, 
-        { y: -200, opacity: 0, scaleY: 1.4, visibility: 'hidden' },
+        { y: -200, opacity: 0, scaleY: 1.6, visibility: 'hidden' }, // Slightly more stretch for watery feel
         { 
           y: 0, opacity: 1, scaleY: 1, visibility: 'visible',
-          duration: 1.2, 
-          ease: "elastic.out(1, 0.6)", // Ultra-smooth watery bounce
+          duration: 1.4, 
+          ease: "elastic.out(1.2, 0.45)", // Even more buttery/watery
           onStart: () => gsap.set(nav, { pointerEvents: 'auto' }),
           onReverseComplete: () => gsap.set(nav, { pointerEvents: 'none' })
         }
       );
       
       const revealTrigger = document.querySelector('#book');
-      const onScroll = () => {
-        if (window.innerWidth > 900) return;
-        if (!revealTrigger) return;
-        
-        const rect = revealTrigger.getBoundingClientRect();
-        if (rect.bottom < -20) { 
-          window.navTl.play();
-        } else {
-          window.navTl.reverse();
-        }
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
+      if (revealTrigger) {
+        ScrollTrigger.create({
+          id: "nav-trigger",
+          trigger: revealTrigger,
+          start: "bottom top+=40", // Trigger exactly when bottom of booking form leaves screen
+          onEnter: () => window.navTl.play(),
+          onLeaveBack: () => window.navTl.reverse(),
+          toggleActions: "play none none reverse"
+        });
+      }
     }
+    // Re-init on resize with a small debounce to prevent glitches
+    window.addEventListener('resize', () => {
+      clearTimeout(window.navResizeTimer);
+      window.navResizeTimer = setTimeout(initMobileNav, 200);
+    });
     initMobileNav();
-    window.addEventListener('resize', initMobileNav);
 
     // Image Fade-In Fallback
     function handleImageLoad() {
