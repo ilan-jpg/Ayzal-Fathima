@@ -102,6 +102,9 @@
       display: flex; justify-content: space-between; align-items: center;
       width: 90%; max-width: 1000px;
       transition: background 0.4s ease, box-shadow 0.4s ease;
+      /* PERFORMANCE: Consolidate centering + GPU acceleration */
+      will-change: transform, opacity;
+      backface-visibility: hidden;
     }
     /* Slightly more opaque on scroll (JS adds .scrolled class) */
     .pill-nav.scrolled {
@@ -142,11 +145,10 @@
     }
     
     /* PERFORMANCE: Force GPU acceleration for all animated elements */
-    .gsap-fade-up, .gsap-fade-left, .service-card, .pill-nav, .reveal-section {
+    .gsap-fade-up, .gsap-fade-left, .service-card, .reveal-section {
         will-change: transform, opacity;
         transform: translateZ(0);
         backface-visibility: hidden;
-        perspective: 1000px;
     }
     
     .pill-nav-wrap {
@@ -563,9 +565,9 @@
       .section-title { font-size: 1.8rem; }
       .pill-nav {
         top: 12px; width: 92%; padding: 8px 16px; min-height: 54px;
-        opacity: 0; transform: translate(-50%, -300%);
-        pointer-events: none;
-        visibility: hidden;
+        opacity: 1 !important; transform: translate(-50%, 0) !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
         z-index: 9999;
         /* PERFORMANCE: Reduce blur on budget mobile */
         backdrop-filter: blur(8px) !important;
@@ -577,7 +579,7 @@
       footer { text-align: center !important; padding-top: 60px !important; } /* Centered footer */
       footer > div:last-child { flex-direction: column; gap: 8px; }
       .contact-actions { flex-direction: column; }
-      .hero-split { padding-top: 200px; } /* Pushed even lower as requested */
+      .hero-split { padding-top: 100px; } /* Reduced space, navbar now permanently here */
       .contact-btn { justify-content: center; }
       #about .badge { visibility: hidden; margin-bottom: 24px; } /* Hide but keep spacing */
     }
@@ -1228,54 +1230,21 @@
     // ═══════════════════════════════════════
     // MOBILE NAV REVEAL LOGIC
     // ═══════════════════════════════════════
+    // Simplified Mobile Nav (Always Visible)
     function initMobileNav() {
       const isMobile = window.innerWidth <= 900;
       const nav = document.querySelector('.pill-nav');
       if (!nav) return;
       
-      // Clear existing ScrollTriggers for nav
+      // Cleanup any existing triggers
       ScrollTrigger.getAll().filter(st => st.vars.id === "nav-trigger").forEach(st => st.kill());
-      if (window.navTl) { window.navTl.kill(); }
       
       if (!isMobile) {
-        nav.classList.add('no-hide');
         gsap.set(nav, { clearProps: "all" });
-        return;
-      }
-      
-      nav.classList.remove('no-hide');
-      
-      // Define the "Buttery Watery" GSAP Timeline
-      window.navTl = gsap.timeline({ paused: true, overwrite: 'auto' });
-      window.navTl.fromTo(nav, 
-        { y: -150, opacity: 0, scaleY: 1.3, visibility: 'hidden' },
-        { 
-          y: 0, opacity: 1, scaleY: 1, visibility: 'visible',
-          duration: 1, 
-          ease: "back.out(1.7)", // Smoother "buttery" watery dip than elastic
-          onStart: () => gsap.set(nav, { pointerEvents: 'auto' }),
-          onReverseComplete: () => gsap.set(nav, { pointerEvents: 'none' })
-        }
-      );
-      
-      const revealTrigger = document.querySelector('#book');
-      if (revealTrigger) {
-        ScrollTrigger.create({
-          id: "nav-trigger",
-          trigger: revealTrigger,
-          start: "bottom top+=20", // The exact point where booking box leaves the screen
-          onEnter: () => window.navTl.play(),
-          onLeaveBack: () => window.navTl.reverse(),
-          toggleActions: "play none none reverse"
-        });
       }
     }
-    // Re-init on resize with a small debounce to prevent glitches
-    window.addEventListener('resize', () => {
-      clearTimeout(window.navResizeTimer);
-      window.navResizeTimer = setTimeout(initMobileNav, 200);
-    });
     initMobileNav();
+    window.addEventListener('resize', initMobileNav);
 
     // Image Fade-In Fallback
     function handleImageLoad() {
