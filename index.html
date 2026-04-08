@@ -569,9 +569,10 @@
         pointer-events: auto !important;
         visibility: visible !important;
         z-index: 9999;
-        /* PERFORMANCE: Reduce blur on budget mobile */
-        backdrop-filter: blur(8px) !important;
-        background: rgba(43, 8, 23, 0.8) !important;
+        /* PERFORMANCE: Frutiger Aero Glass (Light & High-End) */
+        backdrop-filter: blur(14px) saturate(1.8) !important;
+        background: rgba(255, 255, 255, 0.45) !important;
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
       }
       .pill-nav.no-hide { opacity: 1; transform: translate(-50%, 0); visibility: visible; pointer-events: auto; }
       .pill-nav .logo { font-size: 0.95rem; }
