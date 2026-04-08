@@ -450,6 +450,16 @@
       padding: 100px 0;
       background: var(--text-main);
       color: #fff;
+      position: relative;
+    }
+    /* Flawless transition blend for mobile */
+    .contact-section::before {
+      content: ''; position: absolute; top: -100px; left: 0; width: 100%; height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--text-main));
+      pointer-events: none; opacity: 0;
+    }
+    @media (max-width: 900px) {
+      .contact-section::before { opacity: 1; }
     }
     .contact-grid {
       display: grid;
@@ -525,7 +535,7 @@
         background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,225,237,0.85) 100%); 
       }
       .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-      .contact-section { padding: 20px 0 160px; } /* Reduced top for map gap, expanded bottom for footer gap */
+      .contact-section { padding: 60px 0 160px; z-index: 5; } /* Increased top for better spacing */
       .contact-label { font-size: 1rem; color: var(--primary-color); font-weight: 800; letter-spacing: 0.15em; } /* Bigger header */
       .contact-big-title { font-size: 2rem; }
       .signin-box { padding: 24px; }
@@ -1210,14 +1220,14 @@
       
       nav.classList.remove('no-hide');
       
-      const heroText = document.querySelector('.hero-subtext');
+      const revealTrigger = document.querySelector('#book'); // Trigger after booking box
       const onScroll = () => {
         if (window.innerWidth > 900) return;
-        if (!heroText) return;
+        if (!revealTrigger) return;
         
-        const rect = heroText.getBoundingClientRect();
-        // Reveal nav once the "natural glow" hero text is scrolled past
-        if (rect.bottom < 60) { 
+        const rect = revealTrigger.getBoundingClientRect();
+        // Reveal nav once the booking form is scrolled past
+        if (rect.bottom < 50) { 
           if (!nav.classList.contains('mobile-reveal')) {
             nav.classList.add('mobile-reveal');
           }
