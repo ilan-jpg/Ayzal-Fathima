@@ -140,19 +140,6 @@
       transform: scale(1.02);
       box-shadow: 0 8px 25px rgba(255, 45, 146, 0.35); 
     }
-    
-    /* NEW: Buttery watery animation for mobile nav reveal */
-    @keyframes nav-jiggle {
-      0% { transform: translate(-50%, -150%) scaleY(1.2); opacity: 0; }
-      70% { transform: translate(-50%, 15px) scaleY(0.9); opacity: 1; }
-      85% { transform: translate(-50%, -15px) scaleY(1.05); opacity: 1; }
-      100% { transform: translate(-50%, 0) scaleY(1); opacity: 1; }
-    }
-    .pill-nav.mobile-reveal {
-      animation: nav-jiggle 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
-      pointer-events: auto !important;
-      visibility: visible !important;
-    }
     .btn-explode .btn-text { position: relative; z-index: 2; pointer-events: none; }
     .btn-explode .cursor-glow {
         position: absolute;
@@ -560,11 +547,11 @@
       .section-title { font-size: 1.8rem; }
       .pill-nav {
         top: 12px; width: 92%; padding: 8px 16px; min-height: 54px;
-        opacity: 0; transform: translate(-50%, -150%);
+        opacity: 0; transform: translate(-50%, -300%);
         pointer-events: none;
         visibility: hidden;
         z-index: 9999;
-      } /* Initially hidden on mobile */
+      } /* Initially hidden way off screen for GSAP to handle */
       .pill-nav.no-hide { opacity: 1; transform: translate(-50%, 0); visibility: visible; pointer-events: auto; }
       .pill-nav .logo { font-size: 0.95rem; }
       .container { padding: 0 16px; }
@@ -1216,26 +1203,40 @@
       const nav = document.querySelector('.pill-nav');
       if (!nav) return;
       
+      // Reset GSAP state if already exists
+      if (window.navTl) { window.navTl.kill(); }
+      
       if (!isMobile) {
         nav.classList.add('no-hide');
+        gsap.set(nav, { clearProps: "all" });
         return;
       }
       
       nav.classList.remove('no-hide');
       
-      const revealTrigger = document.querySelector('#book'); // Trigger after booking box
+      // Define the "Buttery Watery" GSAP Timeline
+      window.navTl = gsap.timeline({ paused: true });
+      window.navTl.fromTo(nav, 
+        { y: -200, opacity: 0, scaleY: 1.4, visibility: 'hidden' },
+        { 
+          y: 0, opacity: 1, scaleY: 1, visibility: 'visible',
+          duration: 1.2, 
+          ease: "elastic.out(1, 0.6)", // Ultra-smooth watery bounce
+          onStart: () => gsap.set(nav, { pointerEvents: 'auto' }),
+          onReverseComplete: () => gsap.set(nav, { pointerEvents: 'none' })
+        }
+      );
+      
+      const revealTrigger = document.querySelector('#book');
       const onScroll = () => {
         if (window.innerWidth > 900) return;
         if (!revealTrigger) return;
         
         const rect = revealTrigger.getBoundingClientRect();
-        // Show nav when scrolled past booking form; hide when scrolled back above it
         if (rect.bottom < -20) { 
-          if (!nav.classList.contains('mobile-reveal')) {
-            nav.classList.add('mobile-reveal');
-          }
+          window.navTl.play();
         } else {
-          nav.classList.remove('mobile-reveal');
+          window.navTl.reverse();
         }
       };
       window.addEventListener('scroll', onScroll, { passive: true });
