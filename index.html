@@ -143,13 +143,15 @@
     
     /* NEW: Buttery watery animation for mobile nav reveal */
     @keyframes nav-jiggle {
-      0% { transform: translate(-50%, -150%) scaleY(1.2); }
-      70% { transform: translate(-50%, 15px) scaleY(0.9); }
-      85% { transform: translate(-50%, -5px) scaleY(1.05); }
+      0% { transform: translate(-50%, -150%) scaleY(1.2); opacity: 0; }
+      70% { transform: translate(-50%, 15px) scaleY(0.9); opacity: 1; }
+      85% { transform: translate(-50%, -15px) scaleY(1.05); opacity: 1; }
       100% { transform: translate(-50%, 0) scaleY(1); opacity: 1; }
     }
     .pill-nav.mobile-reveal {
-      animation: nav-jiggle 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      animation: nav-jiggle 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+      pointer-events: auto !important;
+      visibility: visible !important;
     }
     .btn-explode .btn-text { position: relative; z-index: 2; pointer-events: none; }
     .btn-explode .cursor-glow {
@@ -558,14 +560,12 @@
       .section-title { font-size: 1.8rem; }
       .pill-nav {
         top: 12px; width: 92%; padding: 8px 16px; min-height: 54px;
-        opacity: 0 !important; transform: translate(-50%, -150%) !important;
-        pointer-events: none; /* Prevent clicks while hidden */
-      } /* Initially hidden on mobile with forced override */
-      .pill-nav.mobile-reveal {
-        opacity: 1 !important; pointer-events: auto;
-        /* Animation 'mobile-reveal' class handles the jiggle transform */
-      }
-      .pill-nav.no-hide { opacity: 1 !important; transform: translate(-50%, 0) !important; transition: none; pointer-events: auto; }
+        opacity: 0; transform: translate(-50%, -150%);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 9999;
+      } /* Initially hidden on mobile */
+      .pill-nav.no-hide { opacity: 1; transform: translate(-50%, 0); visibility: visible; pointer-events: auto; }
       .pill-nav .logo { font-size: 0.95rem; }
       .container { padding: 0 16px; }
       footer { text-align: center !important; padding-top: 60px !important; } /* Centered footer */
