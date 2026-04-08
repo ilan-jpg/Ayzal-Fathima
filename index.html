@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayzal Fathima Beauty Salon</title>
+  
+  <!-- Outcrowd Editorial Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- GSAP & Lenis Smooth Scroll -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.35/dist/lenis.min.js"></script>
+
+  <style>
+    :root {
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         PREMIUM BEAUTY PALETTE — High-Contrast Edition
+         60 % Silk Blush / Pearl White (foundation)
+         30 % Electric Rose / Vibrant Magenta (brand pop)
+         10 % Espresso Plum (deep anchor & text)
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+      --bg-color:       #ffe1ed;   /* Petal Pink - Richer Foundation */
+      --pearl-white:    #ffffff;   /* Pure contrast point            */
+      --surface-hover:  #ffe1ed;   /* Unified foundation             */
+      --section-blush:  #ffe1ed;   /* Unified foundation             */
+      --section-rose:   #d81b60;   /* Electric Rose                  */
+      --section-rose-2: #ad1457;   /* Wine Rose                      */
+      --primary-color:  #ff2d92;   /* Electric Pink                  */
+      --primary-deep:   #c2185b;   /* Luxury Rose                   */
+      --primary-glow:   rgba(255, 45, 146, 0.3);
+      --text-main:      #1a080e;   /* Espresso Plum - Near Black    */
+      --text-muted:     #8a3a5e;   /* Muted Raspberry               */
+      --text-on-rose:   #fff5f9;   /* Light on Dark Pink            */
+      --border-color:   rgba(216, 27, 96, 0.18);
+
+      --font-heading: 'Inter', sans-serif;
+      --font-body:    'Inter', sans-serif;
+      --font-serif:   'Instrument Serif', serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    
+    html.lenis, html.lenis body { height: auto; width: 100vw; overflow-x: hidden; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+    .lenis.lenis-stopped { overflow: hidden; }
+    ::-webkit-scrollbar { width: 0px; } 
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      font-weight: 500; 
+      letter-spacing: -0.04em;
+      margin-bottom: 0.5em;
+    }
+
+    .serif-accent {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.05em;
+      letter-spacing: 0.02em;
+      color: var(--primary-color);
+    }
+    
+    .text-muted { color: var(--text-muted); font-size: 0.95rem; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+    
+    /* PRELOADER */
+    #preloader {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: var(--bg-color); z-index: 99999; display: flex; align-items: center; justify-content: center;
+        flex-direction: column; color: var(--text-main);
+    }
+    .preloader-glow { width: 100px; height: 100px; background: radial-gradient(circle, var(--primary-color), transparent 70%); filter: blur(30px); border-radius: 50%; animation: pulse 2s infinite ease-in-out; }
+    @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
+
+    /* PILL NAV — FRUTIGER AERO GLASS */
+    .pill-nav {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;
+      /* Aero glass: semi-transparent white with heavy blur + saturation boost */
+      background: rgba(255, 255, 255, 0.42);
+      backdrop-filter: blur(28px) saturate(2.2) brightness(1.08);
+      -webkit-backdrop-filter: blur(28px) saturate(2.2) brightness(1.08);
+      /* Classic Aero edges: bright top highlight + subtle pink glow shadow */
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-top-color: rgba(255, 255, 255, 0.95);
+      box-shadow:
+        0 8px 32px rgba(216, 75, 144, 0.12),
+        inset 0 1px 0 rgba(255,255,255,0.95),
+        inset 0 -1px 0 rgba(216,75,144,0.06);
+      border-radius: 100px; padding: 11px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      width: 90%; max-width: 1000px;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    /* Slightly more opaque on scroll (JS adds .scrolled class) */
+    .pill-nav.scrolled {
+      background: rgba(255, 255, 255, 0.62);
+      box-shadow: 0 12px 40px rgba(216, 75, 144, 0.16), inset 0 1px 0 rgba(255,255,255,0.95);
+    }
+
+    .pill-nav .nav-links { display: flex; align-items: center; gap: 28px; }
+    .pill-nav .logo { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; letter-spacing: -0.04em; text-decoration: none; color: var(--text-main); }
+    .pill-nav .logo span { color: var(--primary-color); font-weight: 400; }
+    .pill-nav .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.84rem;
+      transition: color 0.25s; position: relative; padding-bottom: 2px;
+    }
+    .pill-nav .nav-links a::after {
+      content: ''; position: absolute; left: 0; bottom: -1px;
+      width: 0; height: 1.5px; background: var(--primary-color);
+      transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
+      border-radius: 2px;
+    }
+    .pill-nav .nav-links a:hover { color: var(--text-main); }
+    .pill-nav .nav-links a:hover::after { width: 100%; }
+
+    /* CURSOR-FOLLOW GLOW BUTTON */
+    .btn-explode {
+        position: relative; overflow: hidden;
+        display: inline-flex; align-items: center; justify-content: center;
+        padding: 14px 28px; border-radius: 100px;
+        background: var(--primary-color); border: 1px solid var(--primary-color);
+        color: #fff; font-size: 0.88rem; font-weight: 700;
+        cursor: pointer; text-decoration: none;
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 45, 146, 0.2);
+    }
+    .btn-explode:hover { 
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(255, 45, 146, 0.35); 
+    }
+    .btn-explode .btn-text { position: relative; z-index: 2; pointer-events: none; }
+    .btn-explode .cursor-glow {
+        position: absolute;
+        width: 140px; height: 140px;
+        background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.2) 50%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease;
+        opacity: 0;
+        z-index: 1;
+        will-change: transform, opacity;
+    }
+    .btn-explode:hover .cursor-glow {
+        transform: translate(-50%, -50%) scale(1.4);
+        opacity: 1;
+    }
+
+    /* GLASS PANELS & CARDS */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color); box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+      border-radius: 20px; transition: transform 0.3s ease, border-color 0.3s ease;
+      position: relative; overflow: hidden; transform-style: preserve-3d;
+    }
+    
+    /* HERO SPLIT */
+    .hero-split {
+      display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center;
+      min-height: 100vh; padding-top: 100px; padding-bottom: 40px;
+    }
+    .hero-subtext { font-size: 1.15rem; color: var(--text-muted); line-height: 1.6;}
+    .huge-title { font-size: 4rem; line-height: 1.05; margin-bottom: 20px; font-weight: 500; letter-spacing: -0.04em; }
+    
+    /* HERO — warm pink-gradient wash behind globe */
+    .hero-section {
+      position: relative;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 40%, rgba(233,30,140,0.1) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 15% 70%, rgba(194,24,91,0.08) 0%, transparent 65%);
+      background-color: var(--bg-color);
+    }
+
+    .badge {
+      display: inline-block; padding: 6px 14px; border-radius: 100px;
+      background: var(--primary-glow);
+      border: 1px solid rgba(233,30,140,0.25);
+      color: var(--primary-color); font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 24px;
+    }
+
+    /* FORMS */
+    .signin-box { padding: 40px; z-index: 10; position: relative; }
+    .form-group { margin-bottom: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-group input, .form-group select {
+      width: 100%; background: #ffffff; border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 14px 16px; border-radius: 12px; font-family: var(--font-body);
+      font-size: 0.95rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px var(--primary-glow); }
+
+    /* LAYOUT UTILITIES */
+    .outcrowd-horiz {
+      padding: 120px 0;
+      background: var(--section-blush);
+      position: relative;
+    }
+    .section-blush-bg {
+      background: var(--section-blush);
+    }
+    .section-title { font-size: 3.2rem; margin-bottom: 16px; font-weight: 700; color: var(--text-main); line-height: 1.1; }
+    .max-w-800 { max-width: 800px; margin: 0 auto; }
+    .text-center { text-align: center; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; } 
+    .section-padding { padding-top: 120px; padding-bottom: 120px; }
+    .section-desc { font-size: 1.15rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+    .small { font-size: 0.85rem; }
+
+    /* SECTION REVEAL — subtle professional fade-up */
+    .reveal-section {
+      opacity: 0;
+      transform: translateY(32px);
+      transition:
+        opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-section.visible { opacity: 1; transform: translateY(0); }
+    .reveal-section.drift-left  { transform: translateX(-28px) translateY(16px); }
+    .reveal-section.drift-right { transform: translateX(28px)  translateY(16px); }
+    .reveal-section.drift-left.visible,
+    .reveal-section.drift-right.visible { transform: none; }
+
+    /* GLOBE */
+    #globe-container { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; pointer-events: auto; opacity: 0.3; }
+    .blob-bg { position: absolute; right: -100px; top: -100px; width: 600px; height: 600px; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 60%); z-index: 0; filter: blur(50px); pointer-events: none; }
+
+    /* TESTIMONIALS — Card refinement */
+    .testimonial-card {
+      padding: 40px;
+      background: var(--pearl-white);
+      border-radius: 24px;
+      border: 1px solid rgba(216, 27, 96, 0.12);
+      box-shadow: 0 8px 32px rgba(216, 27, 96, 0.04);
+      transition: transform 0.3s ease;
+    }
+    .testimonial-card:hover { transform: translateY(-5px); }
+    .stars { color: var(--primary-color); font-size: 1.2rem; margin-bottom: 16px; }
+
+    /* =====================================================
+       PINK CRYSTAL FLAKE SPRINKLES — static, elegant
+    ===================================================== */
+    /* Flakes live inside specific white sections as absolute elements */
+    .sprinkle-layer {
+      position: absolute; inset: 0;
+      pointer-events: none; overflow: hidden;
+      z-index: 0;
+    }
+    .sprinkle-layer svg {
+      position: absolute;
+      opacity: 0; /* revealed by JS once placed */
+      animation: flake-shimmer var(--fdur, 4s) var(--fdelay, 0s) infinite ease-in-out;
+    }
+    @keyframes flake-shimmer {
+      0%, 100% { opacity: var(--fop, 0.18); }
+      50%       { opacity: calc(var(--fop, 0.18) * 0.45); }
+    }
+
+    /* =====================================================
+       SERVICES — LIGHT & BREATHABLE (Professional Luxe)
+    ===================================================== */
+    .services-section {
+      padding: 120px 0;
+      background: var(--section-blush); /* Unified with About section */
+      position: relative;
+    }
+    .services-section::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 45, 146, 0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    /* Professional texture overlay — much subtler now */
+    .services-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(216, 27, 96, 0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    /* Section headline — white text on rose bg */
+    .services-headline-wrap {
+      text-align: center;
+      margin-bottom: 60px;
+      overflow: hidden;
+    }
+    .services-headline-top {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: var(--text-main);
+      will-change: transform, opacity;
+    }
+    .services-headline-top span { color: var(--primary-color); font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+    .services-headline-bottom {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+      font-weight: 500;
+      will-change: transform, opacity;
+    }
+
+    /* Marquee strip — cleaner, lighter, more airy */
+    .marquee-strip {
+      overflow: hidden; white-space: nowrap;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 0; margin-bottom: 80px;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(5px);
+    }
+    .marquee-inner { display: inline-flex; gap: 40px; animation: marquee-scroll 24s linear infinite; }
+    .marquee-inner span { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+    .marquee-inner .dot { color: var(--primary-color); opacity: 0.4; }
+    @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* 4-column grid of square cards */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    /* Service card — ultra-glass professional aesthetic */
+    .service-card {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow:
+        0 4px 20px rgba(0,0,0,0.03),
+        inset 0 1px 0 rgba(255,255,255,1);
+      transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    .service-card:hover {
+      box-shadow: 0 15px 40px rgba(255, 45, 146, 0.08);
+      transform: translateY(-8px) scale(1.02);
+      background: rgba(255, 255, 255, 0.9);
+      border-color: var(--primary-glow);
+    }
+
+    /* The image that slides UP from the bottom */
+    .service-card-img {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .service-card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transform: translateY(100%);  /* starts hidden below */
+      transition: transform 0.55s cubic-bezier(0.25, 1, 0.35, 1), opacity 0.45s ease;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+    .service-card:hover .service-card-img img {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Soft gradient overlay so text stays readable over the image */
+    .service-card-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to top,
+        rgba(61,36,53,0.72) 0%,
+        rgba(61,36,53,0.15) 55%,
+        transparent 100%);
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+    .service-card:hover .service-card-overlay { opacity: 1; }
+
+    /* Text content layer */
+    .service-card-body {
+      position: relative; z-index: 2;
+      height: 100%; display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 22px;
+    }
+    .service-card-num {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em;
+      color: var(--primary-deep); text-transform: uppercase;
+      margin-bottom: 6px;
+      transition: color 0.35s;
+    }
+    .service-card:hover .service-card-num { color: rgba(255,210,230,0.95); }
+    .service-card-name {
+      font-size: 1rem; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--text-main); line-height: 1.25;
+      transition: color 0.35s;
+    }
+    .service-card:hover .service-card-name { color: #fff; }
+    .service-card-tag {
+      display: inline-block; margin-top: 8px;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--primary-deep); background: rgba(194,24,91,0.1);
+      border: 1px solid rgba(194,24,91,0.2); border-radius: 100px; padding: 3px 10px;
+      transition: background 0.35s, color 0.35s, border-color 0.35s;
+    }
+    .service-card:hover .service-card-tag {
+      background: rgba(255,255,255,0.25);
+      border-color: rgba(255,255,255,0.4);
+      color: #fff;
+    }
+
+    /* Slide-in animation for cards as they enter viewport */
+    .service-card {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    .service-card.in-view {
+      animation: cardSlideIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes cardSlideIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =====================================================
+       CONTACT INFO SECTION
+    ===================================================== */
+    .contact-section {
+      padding: 100px 0;
+      background: var(--text-main);
+      color: #fff;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .contact-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--primary-color); margin-bottom: 20px;
+    }
+    .contact-big-title {
+      font-size: 2.5rem; font-weight: 500; letter-spacing: -0.035em;
+      line-height: 1.15; color: #fff; margin-bottom: 32px;
+    }
+    .contact-big-title span { font-family: var(--font-serif); font-style: italic; color: var(--primary-color); font-weight: 400; }
+    .contact-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+    .contact-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 22px; border-radius: 100px;
+      font-size: 0.9rem; font-weight: 600; text-decoration: none;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .contact-btn:hover { transform: translateY(-2px); }
+    .contact-btn-phone {
+      background: rgba(255,255,255,0.1); color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .contact-btn-phone:hover { background: rgba(255,255,255,0.18); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .contact-btn-whatsapp {
+      background: #25D366; color: #fff; border: 1px solid #25D366;
+    }
+    .contact-btn-whatsapp:hover { background: #1ebe57; box-shadow: 0 8px 24px rgba(37,211,102,0.3); }
+    .contact-number {
+      font-size: 1.4rem; font-weight: 600; color: rgba(255,255,255,0.75); margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+    .hours-grid {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .hours-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.9rem;
+    }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-day { color: rgba(255,255,255,0.55); font-weight: 500; }
+    .hours-time { color: rgba(255,255,255,0.9); font-weight: 600; }
+    .hours-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 100px;
+      background: rgba(216,75,144,0.2); color: var(--primary-color);
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    /* =====================================================
+       RESPONSIVE — MOBILE FIRST
+    ===================================================== */
+    @media (max-width: 900px) {
+      .hero-split { grid-template-columns: 1fr; min-height: auto; padding-top: 110px; padding-bottom: 20px; }
+      .huge-title { font-size: 2.4rem; }
+      .hero-subtext { font-size: 1rem; }
+      .grid-2 { grid-template-columns: 1fr; gap: 24px; }
+      .section-title { font-size: 2.2rem; }
+      .section-padding { padding-top: 80px; padding-bottom: 80px; }
+      .outcrowd-horiz { padding: 80px 0; }
+      .pill-nav { width: 95%; padding: 10px 18px; }
+      .pill-nav .nav-links { display: none; }
+      #globe-container { height: 60vh; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .services-section { padding: 80px 0; background: rgba(255, 255, 255, 0.85); }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .contact-big-title { font-size: 2rem; }
+      .signin-box { padding: 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .badge { font-size: 0.7rem; }
+    }
+    @media (max-width: 540px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .service-card-name { font-size: 0.82rem; }
+      .service-card-body { padding: 12px; }
+      .huge-title { font-size: 2rem; }
+      .section-title { font-size: 1.8rem; }
+      .hero-split { padding-top: 95px; }
+      .pill-nav { top: 12px; padding: 8px 16px; }
+      .pill-nav .logo { font-size: 1rem; }
+      .container { padding: 0 16px; }
+      footer { text-align: left !important; }
+      footer > div:last-child { flex-direction: column; gap: 8px; }
+      .contact-actions { flex-direction: column; }
+      .contact-btn { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- no fixed glitter canvas needed any more — flakes are placed per-section below -->
+
+  <!-- PRELOADER -->
+  <div id="preloader">
+      <div class="preloader-glow"></div>
+      <div style="margin-top: 32px; font-family: var(--font-heading); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary-color);">Discover Your Glow...</div>
+  </div>
+
+  <nav class="pill-nav gsap-nav">
+    <a href="#" class="logo">Ayzal Fathima<span>.</span></a>
+    <div class="nav-links">
+      <a href="#about">The Studio</a>
+      <a href="#services">Services</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#location">Visit Us</a>
+    </div>
+      <a href="#" class="btn-explode login-btn">
+          <span class="btn-text">Book Now</span>
+          <span class="cursor-glow"></span>
+      </a>
+  </nav>
+
+  <div class="hero-section">
+  <div id="globe-container"></div>
+  <div class="blob-bg"></div>
+
+  <div class="container hero-split">
+    <!-- HERO LEFT -->
+    <div class="hero-left">
+      <div class="badge gsap-fade-up">Premium Beauty & Wellness</div>
+      <h1 class="huge-title gsap-fade-up">Wake up to <br><span class="serif-accent">flawless beauty.</span></h1>
+      <p class="hero-subtext gsap-fade-up" style="color: var(--text-muted); font-weight: 500;">Experience bespoke nail artistry, luxurious bridal transformations, and premium skincare. Step into a complete sanctuary strictly tailored to elevate your natural glow.</p>
+      
+      <div class="gsap-fade-up" style="display: flex; gap: 16px; margin-top: 32px; align-items: center;">
+         <div style="display: flex;">
+            <!-- Dummy avatars for social proof -->
+            <img src="https://i.pravatar.cc/100?img=1" loading="lazy" decoding="async" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; margin-right: -10px;">
+            <img src="https://i.pravatar.cc/100?img=5" loading="lazy" decoding="async" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; margin-right: -10px;">
+            <img src="https://i.pravatar.cc/100?img=9" loading="lazy" decoding="async" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff;">
+         </div>
+         <p class="small text-muted" style="margin: 0;"><b>4.9/5 Rating</b><br>Trusted by hundreds</p>
+      </div>
+    </div>
+    
+    <!-- HERO RIGHT (Book Panel) -->
+    <div class="hero-right gsap-fade-left" id="book">
+      <div class="glass-panel signin-box">
+        <h3 class="mb-2" style="font-size: 1.8rem; margin-bottom: 8px;">Book Appointment</h3>
+        <p class="text-muted" style="margin-bottom: 24px;">Secure your spot in our beauty sanctuary.</p>
+        
+        <form action="#" onsubmit="event.preventDefault(); alert('Booking Requested Successfully!');">
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" placeholder="Jane Doe" required>
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="tel" placeholder="+971 50 XXX XXXX" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Select Service</label>
+            <select required>
+                <option value="" disabled selected>-- Select an option --</option>
+                <option>Ayzal Signature Manicure / Pedicure</option>
+                <option>Nail Extensions & Artistry</option>
+                <option>Luxury Facials & Cleanups</option>
+                <option>Premium Hair Cut & Styling</option>
+                <option>Hair Spa & Treatments</option>
+                <option>Bridal Makeup Package</option>
+                <option>Threading & Waxing</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Preferred Date</label>
+              <input type="date" required>
+            </div>
+            <div class="form-group">
+              <label>Time</label>
+              <input type="time" required>
+            </div>
+          </div>
+          
+        <button type="submit" class="btn-explode" style="width: 100%; border-radius: 12px; padding: 16px; margin-top: 16px; font-size: 1rem;">
+            <span class="btn-text">Confirm Reservation</span>
+            <span class="cursor-glow"></span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT SECTION — SILK BLUSH BACKGROUND -->
+  <section id="about" class="section-blush-bg reveal-section">
+    <div class="container section-padding">
+      <div class="max-w-800 mx-auto text-center">
+         <div class="badge gsap-fade-up">Ayzal Fathima Studio</div>
+         <h2 class="section-title gsap-fade-up">Elevating Beauty <br><span class="serif-accent">Standards.</span></h2>
+         <p class="section-desc gsap-fade-up" style="color: var(--text-main); font-weight: 500; opacity: 0.9;">Since our inception, we have been committed to delivering the highest standards of excellence in hair care, skin care, and personal grooming. We fuse superior salon expertise with pristine, luxurious interiors to create a safe haven for our clients.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES — AERO GLASS CARD GRID -->
+  <section id="services" class="services-section reveal-section">
+    <div class="container">
+
+      <!-- Headline -->
+      <div class="services-headline-wrap">
+        <span class="services-headline-top">Our Premium <span>Expertise.</span></span>
+        <span class="services-headline-bottom">Crafted for every woman, every moment.</span>
+      </div>
+
+    </div><!-- /container -->
+
+    <!-- Marquee strip -->
+    <div class="marquee-strip">
+      <div class="marquee-inner">
+        <span>Nails</span><span class="dot">✦</span>
+        <span>Hair</span><span class="dot">✦</span>
+        <span>Skin</span><span class="dot">✦</span>
+        <span>Bridal</span><span class="dot">✦</span>
+        <span>Facials</span><span class="dot">✦</span>
+        <span>Threading</span><span class="dot">✦</span>
+        <span>Waxing</span><span class="dot">✦</span>
+        <span>Massage</span><span class="dot">✦</span>
+        <span>Nails</span><span class="dot">✦</span>
+        <span>Hair</span><span class="dot">✦</span>
+        <span>Skin</span><span class="dot">✦</span>
+        <span>Bridal</span><span class="dot">✦</span>
+        <span>Facials</span><span class="dot">✦</span>
+        <span>Threading</span><span class="dot">✦</span>
+        <span>Waxing</span><span class="dot">✦</span>
+        <span>Massage</span><span class="dot">✦</span>
+      </div>
+    </div>
+
+    <!-- 4×2 Grid of Aero glass cards -->
+    <div class="container">
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&auto=format&fit=crop" loading="lazy" decoding="async" alt="Manicure">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-body">
+            <span class="service-card-num">01</span>
+            <span class="service-card-name">Signature Manicure & Pedicure</span>
+            <span class="service-card-tag">Nails</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&auto=format&fit=crop" loading="lazy" decoding="async" alt="Nail Art">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-body">
+            <span class="service-card-num">02</span>
+            <span class="service-card-name">Nail Extensions & Art</span>
+            <span class="service-card-tag">Nails</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=600&auto=format&fit=crop" loading="lazy" decoding="async" alt="Hair Styling">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-body">
+            <span class="service-card-num">03</span>
+            <span class="service-card-name">Luxury Hair Cut & Styling</span>
+            <span class="service-card-tag">Hair</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&auto=format&fit=crop" loading="lazy" decoding="async" alt="Hair Spa">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-body">
+            <span class="service-card-num">04</span>
+            <span class="service-card-name">Hair Spa & Keratin Treatments</span>
+            <span class="service-card-tag">Hair</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1515688594390-b649af70d282?w=600&auto=format&fit=crop" loading="lazy" decoding="async" alt="Facial">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-body">
+            <span class="service-card-num">05</span>
+            <span class="service-card-name">Luxury Facials & Cleanups</span>
+            <span class="service-card-tag">Skin</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1593621085184-c7e3a80e3d92?w=600&auto=format&fit=crop" loading="lazy" decoding="async" alt="Bridal Makeup">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-body">
+            <span class="service-card-num">06</span>
+            <span class="service-card-name">Bridal Makeup & Packages</span>
+            <span class="service-card-tag">Bridal</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&auto=format&fit=crop" loading="lazy" decoding="async" alt="Threading">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-body">
+            <span class="service-card-num">07</span>
+            <span class="service-card-name">Threading & Waxing</span>
+            <span class="service-card-tag">Grooming</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&auto=format&fit=crop" loading="lazy" decoding="async" alt="Massage">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-body">
+            <span class="service-card-num">08</span>
+            <span class="service-card-name">Relaxation Massage & Body Rituals</span>
+            <span class="service-card-tag">Wellness</span>
+          </div>
+        </div>
+
+      </div><!-- /services-grid -->
+    </div><!-- /container -->
+  </section><!-- /services-section -->
+
+  <!-- TESTIMONIALS SECTION — PEARL WHITE OVER BLUSH -->
+  <section id="testimonials" class="outcrowd-horiz reveal-section drift-left">
+    <div class="container">
+      <div class="text-center max-w-800" style="margin: 0 auto 60px;">
+        <div class="badge gsap-fade-up">Guest Stories</div>
+        <h2 class="section-title gsap-fade-up">Pure Bliss, <span class="serif-accent">Confirmed.</span></h2>
+        <p class="section-desc gsap-fade-up">Don't just take our word for it. See what our loyal guests have to say about their transformations.</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;" class="outcrowd-cards-stagger">
+         <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <p class="small" style="margin-bottom: 20px; color: var(--text-main); font-weight: 500; line-height: 1.6;">"Absolutely stunning experience! The staff is so well trained and my nails have never looked this good. Pure luxury from start to finish."</p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="https://i.pravatar.cc/100?img=1" loading="lazy" decoding="async" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--section-blush);">
+                <h5 style="margin: 0; font-size: 1rem; color: var(--text-main);">Sarah Ahmed</h5>
+            </div>
+         </div>
+         <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <p class="small" style="margin-bottom: 20px; color: var(--text-main); font-weight: 500; line-height: 1.6;">"Booked the bridal package and I was blown away. The attention to detail for my makeup was unmatched. Highly recommend Ayzal Fathima!"</p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="https://i.pravatar.cc/100?img=5" loading="lazy" decoding="async" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--section-blush);">
+                <h5 style="margin: 0; font-size: 1rem; color: var(--text-main);">Fatima Noor</h5>
+            </div>
+         </div>
+         <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <p class="small" style="margin-bottom: 20px; color: var(--text-main); font-weight: 500; line-height: 1.6;">"The best facial I've ever had. They customized the entire process for my skin type. 10/10 experience in a truly calming environment."</p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="https://i.pravatar.cc/100?img=9" loading="lazy" decoding="async" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--section-blush);">
+                <h5 style="margin: 0; font-size: 1rem; color: var(--text-main);">Aisha Al-Hashimi</h5>
+            </div>
+         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP / LOCATION SECTION — BLUSH BG -->
+  <section id="location" class="section-blush-bg reveal-section">
+     <div class="container section-padding">
+       <div class="grid-2">
+          <div class="gsap-fade-up">
+             <div class="badge">Visit Our Studio</div>
+             <h2 class="section-title">Where beauty <br><span class="serif-accent">meets luxury.</span></h2>
+             <p class="section-desc">Located in the heart of beauty, we welcome you to experience our premium sanctuary.</p>
+             <div style="margin-top: 32px; display: grid; gap: 20px;">
+                <div>
+                  <h4 style="color: var(--primary-deep); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Find Us</h4>
+                  <p class="text-main" style="font-weight: 600; line-height: 1.4;">Ayzal Fathima Beauty Salon<br>Dubai, United Arab Emirates</p>
+                </div>
+                <a href="https://www.google.com/maps/place/Ayzal+Fathima+Beauty+Salon/@25.2846928,55.4081055,655m/" target="_blank" class="btn-explode" style="padding: 14px 28px; font-size: 0.9rem; background: var(--text-main); color: #fff;">
+                  <span class="btn-text">Get Directions</span>
+                  <span class="cursor-glow"></span>
+                </a>
+             </div>
+          </div>
+          <div class="gsap-fade-left">
+             <div style="width: 100%; height: 400px; border-radius: 24px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 20px 60px rgba(216, 27, 96, 0.1);">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1804.8192131971764!2d55.4081055!3d25.2846928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x488fc382f551a971%3A0x8bb43a199a499fc7!2sAyzal%20Fathima%20Beauty%20Salon!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+             </div>
+          </div>
+       </div>
+     </div>
+  </section>
+
+  <!-- CONTACT & HOURS SECTION -->
+  <section class="contact-section reveal-section">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Left: CTA + Actions -->
+        <div>
+          <p class="contact-label">Get in Touch</p>
+          <h2 class="contact-big-title">Come visit your<br><span>Sanctuary.</span></h2>
+          <p class="contact-number">+971 4 572 9018</p>
+          <p style="color: rgba(255,255,255,0.45); font-size: 0.85rem; margin-bottom: 28px;">United Arab Emirates</p>
+
+          <div class="contact-actions">
+            <a href="tel:+97145729018" class="contact-btn contact-btn-phone">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12.1 19.79 19.79 0 0 1 1.61 3.57 2 2 0 0 1 3.6 1.37h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6.08 6.08l1.69-1.83a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              Call Now
+            </a>
+            <a href="https://wa.me/97145729018" target="_blank" class="contact-btn contact-btn-whatsapp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Hours -->
+        <div>
+          <p class="contact-label">Opening Hours</p>
+          <div class="hours-grid">
+            <div class="hours-row">
+              <span class="hours-day">Monday</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="hours-badge">Open</span>
+                <span class="hours-time">9 am &ndash; 11 pm</span>
+              </div>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Tuesday</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="hours-badge">Open</span>
+                <span class="hours-time">9 am &ndash; 11 pm</span>
+              </div>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Wednesday</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="hours-badge">Open</span>
+                <span class="hours-time">9 am &ndash; 11 pm</span>
+              </div>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Thursday</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="hours-badge">Open</span>
+                <span class="hours-time">9 am &ndash; 11 pm</span>
+              </div>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Friday</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="hours-badge">Open</span>
+                <span class="hours-time">9 am &ndash; 11 pm</span>
+              </div>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Saturday</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="hours-badge">Open</span>
+                <span class="hours-time">9 am &ndash; 11 pm</span>
+              </div>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Sunday</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="hours-badge">Open</span>
+                <span class="hours-time">9 am &ndash; 11 pm</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="container section-padding text-center">
+    <h2 class="huge-title gsap-fade-up">Claim your <span class="serif-accent">Glow.</span></h2>
+    <p class="text-muted mb-4 max-w-800 mx-auto gsap-fade-up" style="margin-bottom: 40px; font-family: var(--font-serif); font-style: italic; font-size: 1.3rem;">"If you stare long enough at your flawless results, the stress just melts away. Book and relax."</p>
+    
+    <a href="#book" class="btn-explode gsap-fade-up" style="padding: 18px 36px; font-size: 1.1rem; background: var(--text-main); color: white;">
+        <span class="btn-text">Make a Reservation</span>
+        <span class="cursor-glow" style="background: radial-gradient(circle, rgba(168,85,247,0.9) 0%, rgba(216,75,144,0.65) 45%, transparent 70%);"></span>
+    </a>
+
+    <div style="margin-top: 60px; padding-top: 32px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 0.82rem; color: var(--text-muted);">
+        <div>&copy; 2026 Ayzal Fathima Beauty Salon. All rights reserved.</div>
+        <div style="display: flex; gap: 20px;">
+            <a href="#" style="color: var(--text-muted); text-decoration: none;">Instagram</a>
+            <a href="#" style="color: var(--text-muted); text-decoration: none;">Facebook</a>
+            <a href="tel:+97145729018" style="color: var(--text-muted); text-decoration: none;">Contact</a>
+        </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/three"></script>
+  <script src="https://unpkg.com/globe.gl"></script>
+  
+  <script>
+    // ═══════════════════════════════════════
+    // GLITTER PARTICLES — scattered pink sparkles
+    // ═══════════════════════════════════════
+    // ═══════════════════════════════════════
+    // PINK CRYSTAL FLAKE SPRINKLES
+    // Static SVG flakes placed on white sections — no animation loops,
+    // no compositor layers, no GPU thrash. Professional & elegant.
+    // ═══════════════════════════════════════
+    (function spawnFlakes() {
+      const targets = [
+        document.getElementById('about'),
+        document.getElementById('testimonials'),
+        document.querySelector('footer'),
+      ].filter(Boolean);
+
+      const shapes = [
+        'M4,0 L8,3 L7,8 L3,9 L0,5 Z',
+        'M5,0 L9,2 L8,7 L5,10 L1,8 L0,3 Z',
+        'M0,2 L3,0 L7,1 L9,5 L6,9 L2,8 Z',
+        'M2,0 L6,0 L8,4 L5,8 L1,7 Z',
+        'M4,0 L8,2 L9,6 L6,9 L2,8 L0,4 Z',
+      ];
+      const colors = ['#ff2d92','#f472b6','#d81b60','#f9a8d4','#ad1457'];
+
+      targets.forEach(section => {
+        if (getComputedStyle(section).position === 'static') section.style.position = 'relative';
+
+        const layer = document.createElement('div');
+        layer.className = 'sprinkle-layer';
+        layer.setAttribute('aria-hidden', 'true');
+        section.prepend(layer);
+
+        // Cluster spawning: Pick a few cluster centers
+        const CLUSTER_COUNT = 6;
+        for (let c = 0; c < CLUSTER_COUNT; c++) {
+          const centerX = Math.random() * 90 + 5;
+          const centerY = Math.random() * 80 + 10;
+          
+          // Spawn particles around each center
+          const BATCH_SIZE = 8 + Math.floor(Math.random() * 6);
+          for (let i = 0; i < BATCH_SIZE; i++) {
+            const size  = Math.random() * 8 + 3;
+            const offsetX = (Math.random() - 0.5) * 12; // spread around center
+            const offsetY = (Math.random() - 0.5) * 18;
+            const rot   = Math.random() * 360;
+            const op    = (Math.random() * 0.18 + 0.12).toFixed(2); // increased opacity slightly
+            const dur   = (Math.random() * 4 + 4).toFixed(1);
+            const delay = (Math.random() * 8).toFixed(1);
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            const ns = 'http://www.w3.org/2000/svg';
+            const svg = document.createElementNS(ns, 'svg');
+            svg.setAttribute('width', size);
+            svg.setAttribute('height', size);
+            svg.setAttribute('viewBox', '0 0 10 10');
+            svg.style.cssText = `left:${centerX + offsetX}%;top:${centerY + offsetY}%;transform:rotate(${rot}deg);--fop:${op};--fdur:${dur}s;--fdelay:${delay}s;z-index:1;`;
+
+            const path = document.createElementNS(ns, 'path');
+            path.setAttribute('d', shape);
+            path.setAttribute('fill', color);
+            svg.appendChild(path);
+            layer.appendChild(svg);
+          }
+        }
+      });
+    })();
+
+    // PRELOADER & HERO INITS
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            gsap.to('#preloader', { opacity: 0, duration: 1, ease: 'power2.inOut', onComplete: () => {
+                document.getElementById('preloader').style.display = 'none';
+                
+                gsap.fromTo('.gsap-nav', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' });
+                gsap.fromTo('.hero-left .gsap-fade-up', 
+                    { y: 50, opacity: 0 }, 
+                    { y: 0, opacity: 1, duration: 1, ease: 'power3.out', stagger: 0.15 }
+                );
+                gsap.fromTo('.hero-right', 
+                    { x: 50, opacity: 0 }, 
+                    { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.3 }
+                );
+            }});
+        }, 800); 
+    });
+
+    // LENIS SMOOTH SCROLL — single RAF via GSAP ticker only
+    const lenis = new Lenis({
+        duration: 1.1,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smooth: true
+    });
+    // ONLY use GSAP ticker — do NOT also call requestAnimationFrame(raf)
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+    lenis.on('scroll', ScrollTrigger.update);
+
+    // NAV SMOOTH SCROLL — all anchor links go through Lenis
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          lenis.scrollTo(target, { offset: -80, duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+        }
+      });
+    });
+
+    // NAV scrolled class
+    window.addEventListener('scroll', () => {
+      document.querySelector('.pill-nav').classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // SCROLLTRIGGER EFFECTS
+    gsap.registerPlugin(ScrollTrigger);
+
+    const fadeUps = document.querySelectorAll('section .gsap-fade-up, footer .gsap-fade-up, .gsap-fade-left');
+    fadeUps.forEach(el => {
+        gsap.fromTo(el, 
+            { y: el.classList.contains('gsap-fade-left') ? 0 : 60, x: el.classList.contains('gsap-fade-left') ? 60 : 0, opacity: 0 },
+            {
+                y: 0, x: 0, opacity: 1, duration: 1.2, ease: 'power3.out',
+                scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none reverse" }
+            }
+        );
+    });
+
+    const staggerSections = document.querySelectorAll('.outcrowd-cards-stagger');
+    staggerSections.forEach(section => {
+        gsap.fromTo(section.children, 
+            { y: 60, opacity: 0 },
+            {
+                y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: 'power3.out',
+                scrollTrigger: { trigger: section, start: "top 85%", toggleActions: "play none none reverse" }
+            }
+        );
+    });
+
+    // ═══════════════════════════════════════
+    // SERVICES SECTION — AERO CARD ANIMATIONS
+    // ═══════════════════════════════════════
+
+    // 1. Headline bursts open
+    gsap.fromTo('.services-headline-top',
+        { y: '60px', opacity: 0 },
+        { y: '0px', opacity: 1, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: '.services-headline-wrap', start: 'top 85%' } }
+    );
+    gsap.fromTo('.services-headline-bottom',
+        { y: '30px', opacity: 0 },
+        { y: '0px', opacity: 1, duration: 1, ease: 'power3.out', delay: 0.12,
+          scrollTrigger: { trigger: '.services-headline-wrap', start: 'top 85%' } }
+    );
+
+    // 2. Cards stagger-in using IntersectionObserver
+    const serviceCards = document.querySelectorAll('.service-card');
+    const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const card = entry.target;
+                const delay = Array.from(serviceCards).indexOf(card) * 70;
+                setTimeout(() => card.classList.add('in-view'), delay);
+                cardObserver.unobserve(card);
+            }
+        });
+    }, { threshold: 0.1 });
+    serviceCards.forEach(card => cardObserver.observe(card));
+
+    // ═══════════════════════════════════════
+    // SECTION REVEAL — each section rises in as it enters
+    // ═══════════════════════════════════════
+    const revealSections = document.querySelectorAll('.reveal-section');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // slight delay based on document order for a cascade feel
+          const idx = Array.from(revealSections).indexOf(entry.target);
+          setTimeout(() => entry.target.classList.add('visible'), idx * 40);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+    revealSections.forEach(s => revealObserver.observe(s));
+
+    // CURSOR-FOLLOW GLOW on all .btn-explode buttons
+    document.querySelectorAll('.btn-explode').forEach(button => {
+        const glow = button.querySelector('.cursor-glow');
+        if (!glow) return;
+
+        button.addEventListener('mousemove', (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            glow.style.left = x + 'px';
+            glow.style.top  = y + 'px';
+        });
+
+        button.addEventListener('mouseleave', () => {
+            glow.style.transform = 'translate(-50%, -50%) scale(0)';
+            glow.style.opacity = '0';
+        });
+
+        button.addEventListener('mouseenter', () => {
+            glow.style.transform = 'translate(-50%, -50%) scale(1.4)';
+            glow.style.opacity = '1';
+        });
+    });
+
+    // GLOBE JS — IntersectionObserver lazy init (no page flash!)
+    const globeContainer = document.getElementById('globe-container');
+    let world;
+
+    const globeObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !world) {
+            world = Globe()(globeContainer)
+              .backgroundColor('rgba(253,250,251,0)')
+              .showGlobe(false)
+              .showAtmosphere(false)
+              .width(globeContainer.clientWidth)
+              .height(window.innerHeight);
+
+            fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
+              .then(res => res.json())
+              .then(countries => {
+                world.hexPolygonsData(countries.features)
+                  .hexPolygonResolution(3)
+                  .hexPolygonMargin(0.65)
+                  .hexPolygonColor(() => 'rgba(216, 75, 144, 0.2)');
+
+                const N = 40;
+                const gData = [...Array(N).keys()].map(() => ({
+                  lat: (Math.random() - 0.5) * 160,
+                  lng: (Math.random() - 0.5) * 360,
+                  size: Math.random() * 0.4 + 0.1,
+                  color: '#d84b90'
+                }));
+
+                world.pointsData(gData)
+                  .pointAltitude(0.01)
+                  .pointRadius('size')
+                  .pointColor('color')
+                  .pointsMerge(true);
+
+                world.controls().autoRotate = true;
+                world.controls().autoRotateSpeed = 0.5;
+                world.controls().enableZoom = false;
+              });
+
+            globeObserver.disconnect(); // only init once
+        }
+    }, { threshold: 0 });
+    globeObserver.observe(globeContainer);
+
+    window.addEventListener('resize', () => {
+      if (world) {
+          world.width(globeContainer.clientWidth);
+          world.height(window.innerHeight);
+      }
+    });
+  </script>
+</body>
+</html>
