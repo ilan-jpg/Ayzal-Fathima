@@ -1229,11 +1229,13 @@
         if (!revealTrigger) return;
         
         const rect = revealTrigger.getBoundingClientRect();
-        // Reveal nav once the booking form is fully scrolled off screen (rect.bottom < 0)
-        if (rect.bottom < 0) { 
+        // Show nav when scrolled past booking form; hide when scrolled back above it
+        if (rect.bottom < -20) { 
           if (!nav.classList.contains('mobile-reveal')) {
             nav.classList.add('mobile-reveal');
           }
+        } else {
+          nav.classList.remove('mobile-reveal');
         }
       };
       window.addEventListener('scroll', onScroll, { passive: true });
